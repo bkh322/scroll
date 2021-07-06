@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="kr">
+    <head>
+        <head>
+            <meta charset="UTF-8">
+            <script type="text/javascript" src="script.js"></script> 
+            <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="wrap_scroll">
+        <div class="images">
+                   
+        </div>
+        <div class="spiner_wrap">
+         <div class="spiner"></div>
+        </div>
+      </div>
+          <script src="https://code.jquery.com/jquery-2.2.1.js"></script>
+          <script>
+            const ctx = $('.wrap_scroll');
+            let $maxHeight, $ctxScrollTop, ctxScrollHeight, color; 
+            const $list = $('.images');
+         
+         /*  window.onload = function(){
+              location.reload();
+            };
+            */
+
+            function imgLoding(){
+             const $spiner = $('.spiner'); // 스피너 추가
+             const $spiner_wrap = $('.spiner_wrap'); // 스피너 백그라운드
+              $.ajax({
+                type: 'GET', // get 방식으로 요청
+                dataType: 'json', // json 타입
+                url: "https://bkh322.github.io/scroll/db/json-server-exam/db.json", // 데이터를 불러오는 json-server 주소입니다 .
+                beforeSend : function(){ // 요청을 보내기전
+                  $spiner_wrap.show();
+                  $spiner.show(); // 요청을 보내기전에 스피너를 보여줍니다.
+                }
+              })
+              .done(function (data) { // 성공시 호출될 함수
+                setTimeout(function () { // 1초의 딜레이를 주었습니다.
+                  data.item.forEach(function (value) { // 데이터의 갯수에 따라서 div를 추가해줬습니다 ㅎㅎ
+                    $list.append(
+                    '<div class="image">'
+                    +
+                    "<img src='"+ value.src+ "'/>"
+                    +
+                    "<span>" 
+                    +
+                    value.id
+                    +
+                    "</span>"
+                    +
+                    "</div>");
+                   
+                 /*   let images = document.querySelectorAll(".image");
+                    let imgStack = [0, 0, 0];
+                    let colWidth = 250;
+                    for(let i = 0; i < images.length; i++) {
+                      let minIndex = imgStack.indexOf(Math.min.apply(0, imgStack));
+                      let x = colWidth * minIndex;
+                      let y = imgStack[minIndex];
+                      imgStack[minIndex] += (images[i].children[0].height + 10);
+                      images[i].style.transform = `translateX(${x}px) translateY(${y}px)`;
+                      if(i === images.length - 1) {
+                        document.querySelector(".images").style.height = `${Math.max.apply(0, imgStack)}px`;
+                      }
+                    }  */
+
+                    let images = $(".image");
+                    let imgStack = [0, 0, 0];
+                    let colWidth = 250;
+                    for(let i = 0; i < images.length; i++){
+                      const img = images[i].children[0];
+                      const masonry = () => {
+                        let minIndex = imgStack.indexOf(Math.min.apply(0, imgStack));
+                        let x = colWidth * minIndex;
+                        let y = imgStack[minIndex];
+                        imgStack[minIndex] += (images[i].children[0].height + 10);
+                        images[i].style.transform = `translateX(${x}px) translateY(${y}px)`;
+                        if(i === images.length - 1) {
+                          document.querySelector(".images").style.height = `${Math.max.apply(0, imgStack)}px`;
+                        }                        
+                      };
+                      if(img.complete){
+                        masonry();
+                      }else{
+                        img.onload = masonry;
+                      }
+                    }
+                  });
+                  $spiner.hide(); // 요청이 마무리된후 스피너를 다시 가려줍니다.              
+                  $spiner_wrap.hide();    
+              }, 500);
+              })
+              .fail(function (err) { // 실패했을때 불러질 함수
+                console.error('데이터 불러오기 실패');
+              });              
+            }
+
+            
+            imgLoding();
+
+
+            ctx.on('scroll', function (e) {
+            $maxHeight = $(this).height(); // 박스 높이값
+            $ctxScrollTop = $(this).scrollTop(); // 스크롤 위치값
+            ctxScrollHeight = this.scrollHeight; // 스크롤포함 높이값
+            if (ctxScrollHeight - $ctxScrollTop === $maxHeight) {
+              imgLoding();
+            }
+            });            
+          </script>          
+    </body>
+</html>

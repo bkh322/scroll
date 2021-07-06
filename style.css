@@ -1,0 +1,60 @@
+* {
+    box-sizing: border-box;
+    }
+
+    .images {
+    max-width: 750px;
+    margin: 0 auto;
+    position: relative;
+    }
+
+    .image {
+    display: inline-block;
+    position: absolute;
+    max-width: 250px;
+    padding: 5px;
+    }
+
+    .image > img {
+    width: 100%;
+    }
+
+    .image > span {
+    position: absolute;
+    color: white;
+    bottom: 25px;
+    right: 25px;
+    }       
+    .wrap_scroll{
+        position: relative;
+        height: 80vh;
+        overflow-y:scroll;
+    }  
+    .spiner_wrap{
+        width: 750px;
+        height: 80vh;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+    }
+    .wrap_scroll .spiner{
+        position: fixed;
+        top: 40%;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        width: 50px;
+        height: 50px;
+        display: none;
+        border: 5px solid white;
+        border-color: white transparent transparent;
+        border-radius: 50%;
+        animation : spin 1s linear infinite;
+    }
+    @keyframes spin {
+        100% {  transform: rotate(360deg);  }
+    }
